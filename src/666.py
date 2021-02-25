@@ -8,10 +8,7 @@ def open_file(namafile):
     with open(namafile,'r') as f:
         lines = f.read()
         lines = lines.replace(" ","\n")
-        # lines = lines.append
-
     for line in lines :
-        # print(line)
         if (line == ','):
             lista.append(kata)
             kata = ''
@@ -24,39 +21,17 @@ def open_file(namafile):
             kata = ''
         else :
             kata += line
-            # print(kata)
     return listi
-
-    #     line = line.replace(",","\n")
-    #     line = line.replace(" ","")
-    #     line = line.replace("\n","")
-    #     if '.' in line:
-    #         line = line.replace(".","")
-    #     print
-    #     lista.append(line)
-    #     print(lista)
-    #     # line = line.rstrip(",") 
-    #     print(line)
-
-    # return char
 
 def hapuselemen(sirsak,jambu):
     # MELAKUKAN PENGHAPUSAN JAMBU PADA LIST SIRSAK
     for i in range(len(sirsak)):
-        # if len(sirsak[i]) == 0:
-            # sirsak[i],sirsak[len(sirsak)-1] = sirsak[len(sirsak)-1],sirsak[i]
-            # sirsak = sirsak[:-1]
         for j in range (len(sirsak[i])):
-            # print (i," - ",j)
-            # print (len(sirsak)," -- ",len(sirsak[i]) )
-            if (sirsak[i][j] == jambu):
-                sirsak[i][j] = ''
-                # SWAP MENJADI ELEMEN TERAKHIR
-                # sirsak[i][j],sirsak[i][len(sirsak[i])-1] = sirsak[i][len(sirsak[i])-1],sirsak[i][j]
-                # # DELETE ELEMENT PADA LIST
-                # sirsak[i] = sirsak[i][:-1]
+            for k in range(len(jambu)):
+                if (sirsak[i][j] == jambu[k]):
+                    sirsak[i][j] = ''
     sirsak = hapuselementkosong(sirsak)
-    print(sirsak)
+    # print(sirsak)
     return sirsak
 
 def hapuselementkosong(sirsak):
@@ -66,7 +41,7 @@ def hapuselementkosong(sirsak):
         if len(sirsak[i]) == 0:
             sirsak[i],sirsak[len(sirsak)-1] = sirsak[len(sirsak)-1],sirsak[i]
             sirsak = sirsak[:-1]
-        if (len(sirsak[i]) == 1 and sirsak[i][0] == ''):
+        elif (len(sirsak[i]) == 1 and sirsak[i][0] == ''):
             sirsak[i],sirsak[len(sirsak)-1] = sirsak[len(sirsak)-1],sirsak[i]
             sirsak = sirsak[:-1]
         i += 1
@@ -81,6 +56,49 @@ def hapuselementkosong(sirsak):
 
     return sirsak
 
+def inttoroman(num):
+    rom = ''
+    if(num//1000 >= 1):
+        num = num % 1000
+        rom += 'M'
+    if(num//900 >= 1):
+        num = num % 900
+        rom += 'CM'
+    if(num//500 >= 1):
+        num = num % 500
+        rom += 'D'
+    if(num//400 >= 1):
+        num = num % 400
+        rom += 'CD'
+    if(num//100 >= 1):
+        num = num % 100
+        rom += 'C'
+    if(num//90 >= 1):
+        num = num % 90
+        rom += 'XC'
+    if(num//50 >= 1):
+        num = num % 50
+        rom += 'L'
+    if(num//40 >= 1):
+        num = num % 40
+        rom += 'XL'
+    if(num//10 >= 1):
+        num = num % 10
+        rom += 'X'
+    if(num//9 >= 1):
+        num = num % 9
+        rom += 'IX'
+    if(num//5 >= 1):
+        num = num % 5
+        rom += 'V'
+    if(num//4 >= 1):
+        num = num % 4
+        rom += 'IV'
+    if(num != 0 and num//1 >= 1):
+        for i in range(num):
+            rom += 'I'
+    return rom
+ 
 
 # MELAKUKAN DECREASE AND CONQUER
 def topsort(apel,durian):
@@ -92,7 +110,8 @@ def topsort(apel,durian):
                 nangka.append(apel[i][0])
                 index = i
         durian.append(nangka)
-        topsort(hapuselemen(apel,apel[index][0]),durian)
+        topsort(hapuselemen(apel,nangka),durian)
+        # print(hapuselemen(apel,nangka),durian)
     return durian
 
 
@@ -101,9 +120,11 @@ def topsort(apel,durian):
 soal = open_file("../test/soal.txt")
 jawaban = []
 topsort(soal,jawaban)
-print(jawaban)
-# print(soal)
-# print(jawaban)
+jawaban = hapuselementkosong(jawaban)
+print("JADWAL PENGAMBILAN MATKUL : ")
+for i in range(len(jawaban)):
+    print("Semester ",inttoroman(i+1)," \t: ", ','.join(jawaban[i]))
+# print(hapuselementkosong(jawaban))
 # print("------------------------------------")
 # jawaban = topsort(soal,jawaban)
 # print(soal)
