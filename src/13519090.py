@@ -1,6 +1,8 @@
 #!/usr/bin/python3
+import datetime 
 
 def open_file(namafile):
+    # MEMBUKA FILE.TXT DAN MENGUBAH MENJADI ADJACENCY LIST
     kata = ""
     cek = True
     lista = []
@@ -21,39 +23,41 @@ def open_file(namafile):
             kata = ''
         else :
             kata += line
+    # print(listi)
     return listi
 
 def hapuselemen(sirsak,jambu):
-    # MELAKUKAN PENGHAPUSAN JAMBU PADA LIST SIRSAK
+    # MELAKUKAN PENGUBAHAN ELEMEN LIST SIRSAK DENGAN NILAI JAMBU
     for i in range(len(sirsak)):
         for j in range (len(sirsak[i])):
             for k in range(len(jambu)):
+                # PENGECEKAN JIKA ADA ELEMEN ELEMEN SIRKSA YANG SAMA DENGAN ELEMEN JAMBU
                 if (sirsak[i][j] == jambu[k]):
+                    # MELAKUKAN PENGUBAHAN ELEMEN SIRSAK DENGNA NILAI ''
                     sirsak[i][j] = ''
-    sirsak = hapuselementkosong(sirsak)
-    # print(sirsak)
-    return sirsak
+    # MENGHAPUS ELEMEN DARI SIRSAK DENGAN NILAI ''
+    return hapuselementkosong(sirsak)
 
 def hapuselementkosong(sirsak):
+    # MENGHAPUS LIST YANG KOSONG (ELEMEN BERNILAI '')
     i = 0
     j = 0
+    # MENGHAPUS ELEMEN LIST YANG KOSONG ATAU MEMILIKI 1 ELEMEN DENGAN NILAI ''
     while (i < len(sirsak)):
         if len(sirsak[i]) == 0:
-            sirsak[i],sirsak[len(sirsak)-1] = sirsak[len(sirsak)-1],sirsak[i]
-            sirsak = sirsak[:-1]
+            sirsak.remove(sirsak[i])
         elif (len(sirsak[i]) == 1 and sirsak[i][0] == ''):
-            sirsak[i],sirsak[len(sirsak)-1] = sirsak[len(sirsak)-1],sirsak[i]
-            sirsak = sirsak[:-1]
-        i += 1
-
+            sirsak.remove(sirsak[i])
+        else :
+            i += 1
+    # MENGHAPUS ELEMEN LIST DALAM LIST DENGAN NILAI ''
     for i in range(len(sirsak)):
         j=0
         while(j <len(sirsak[i])):
             if sirsak[i][j] == '':
-                sirsak[i][j],sirsak[i][len(sirsak[i])-1] = sirsak[i][len(sirsak[i])-1],sirsak[i][j]
-                sirsak[i] = sirsak[i][:-1]
-            j +=1
-
+                sirsak[i].remove(sirsak[i][j])
+            else :
+                j +=1
     return sirsak
 
 def inttoroman(num):
@@ -109,30 +113,28 @@ def topsort(apel,durian):
             if (len(apel[i]) == 1):
                 nangka.append(apel[i][0])
                 index = i
+        # MEMASUKAN MATA KULIAH YANG SUDAH DIAMBIL TERHADAP LIST DURIAN
         durian.append(nangka)
+        # MELAKUKAN REKURSI DENGAN LIST APEL TANPA MATA KULIAH YANG SUDAH DIAMBIL (SUDAH DI-DECREASE)
         topsort(hapuselemen(apel,nangka),durian)
-        # print(hapuselemen(apel,nangka),durian)
     return durian
 
-
-
 # PROGRAM UTAMA
-soal = open_file("../test/soal.txt")
+soal = open_file("../test/soal8.txt")
+begin_time = datetime.datetime.now()
+cek = True
 jawaban = []
-topsort(soal,jawaban)
-jawaban = hapuselementkosong(jawaban)
-print("JADWAL PENGAMBILAN MATKUL : ")
-for i in range(len(jawaban)):
-    print("Semester ",inttoroman(i+1)," \t: ", ','.join(jawaban[i]))
-# print(hapuselementkosong(jawaban))
-# print("------------------------------------")
-# jawaban = topsort(soal,jawaban)
-# print(soal)
-# print(jawaban)
-# print("------------------------------------")
-# topsort(soal,jawaban)
-# print(soal)
-# print(jawaban)
-# topsort(soal,jawaban)
-# print(jawaban)
-# topsort(soal,jawaban)
+for i in range(len(soal)):
+    if (len(soal[i]) == 1):
+        cek = False
+        break
+if (not cek):
+    topsort(soal,jawaban)
+    jawaban = hapuselementkosong(jawaban)
+    print("JADWAL PENGAMBILAN MATKUL : ")
+    for i in range(len(jawaban)):
+        if (len(jawaban[i])!= 0):
+            print("Semester",inttoroman(i+1),"\t: ", ', '.join(jawaban[i])+'.')
+    print("WAKTU YANG DIGUNAKAN : ",datetime.datetime.now() - begin_time )
+else:
+    print("Mohon maaf, tidak ada mata kuliah tanpa prerequisite")
